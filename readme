@@ -4,4 +4,9 @@ A fast, lightweight prototype for swapping clothes and earning eco‑points.
 
 KYRA is a sustainable clothing-swap platform that lets users exchange clothes, earn eco-points, and level up through a tier system (Bronze, Silver, Gold). Users can list their items, request swaps, and track their wardrobe virtually. The platform also includes real-time swap notifications, weather-based outfit suggestions, and a point wallet that rewards eco-friendly actions.
 
-Built with React (frontend) and Express + Prisma + PostgreSQL (backend), KYRA supports image uploads via Cloudinary and user authentication with JWT. This MVP focuses on core flows like item listing, swap requests, and gamified incentives, with future-ready features like AR try-ons, mood-based outfit suggestions, and NFT clothing certification on the roadmap.
+Built with React (frontend) and Express+Python + Prisma + SQL (backend), KYRA supports image uploads via Cloudinary and user authentication with JWT. This MVP focuses on core flows like item listing, swap requests, and gamified incentives, with future-ready features like AR try-ons, mood-based outfit suggestions, and NFT clothing certification on the roadmap.
+
+Team members:
+Anjana Rangarajan
+Siddharth Srinivasan
+https://youtu.be/-b-cfjJ9h7I
