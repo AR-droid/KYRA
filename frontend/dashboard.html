@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYRA Dashboard</title>
+    <style>
+        body {
+            background: #fff;
+            color: #10131a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            background: #10131a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #4f8cff;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .eco-points {
+            background: #fff;
+            color: #10131a;
+            border-radius: 20px;
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(16,19,26,0.08);
+        }
+        .logout-btn {
+            background: #10131a;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .logout-btn:hover {
+            background: #fff;
+            color: #10131a;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 7.5rem auto 2rem auto;
+            padding: 0 2rem;
+        }
+        .welcome-section {
+            background: #10131a;
+            color: #fff;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(16,19,26,0.10);
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+        .welcome-section h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .welcome-section p {
+            color: #e0e0e0;
+            font-size: 1.15rem;
+        }
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: #10131a;
+            color: #fff;
+            border-radius: 12px;
+            width: 200px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px rgba(16,19,26,0.10);
+            margin-bottom: 1.5rem;
+        }
+        .stat-card h3 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            color: #fff;
+        }
+        .stat-card p {
+            color: #e0e0e0;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+        .actions-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .action-card {
+            background: #10131a;
+            color: #fff;
+            border-radius: 12px;
+            width: 270px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2rem 1.2rem 1.5rem 1.2rem;
+            box-shadow: 0 4px 24px rgba(16,19,26,0.10);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .action-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .action-card p {
+            color: #e0e0e0;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        .btn {
+            background: #fff;
+            color: #10131a;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(16,19,26,0.08);
+        }
+        .btn:hover {
+            background: #4f8cff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #10131a;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+        .btn-secondary:hover {
+            background: #fff;
+            color: #10131a;
+        }
+        @media (max-width: 900px) {
+            .stats-grid, .actions-grid {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 0.7rem;
+                padding: 1rem 0.5rem;
+            }
+            .container {
+                padding: 0 0.5rem;
+            }
+            .welcome-section h1 {
+                font-size: 1.3rem;
+            }
+            .stat-card, .action-card {
+                width: 95vw;
+                min-width: 0;
+                padding: 1.5rem 0.5rem 1rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">KYRA</div>
+        <div class="nav-links">
+            <a href="#dashboard">DASHBOARD</a>
+            <a href="#items">MY ITEMS</a>
+            <a href="#swaps">SWAPS</a>
+            <a href="#browse">BROWSE</a>
+        </div>
+        <div class="user-info">
+            <div class="eco-points">
+                🌱 <span id="userEcoPoints">0</span> points
+            </div>
+            <span id="userName">User</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome back, <span id="userFullName">User</span>! 🌱</h1>
+            <p>Ready to swap some clothes and earn eco-points? Let's make fashion sustainable together!</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="totalItems">0</h3>
+                <p>Items Listed</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalSwaps">0</h3>
+                <p>Swaps Completed</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="userTier">Bronze</h3>
+                <p>Current Tier</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="pendingSwaps">0</h3>
+                <p>Pending Swaps</p>
+            </div>
+        </div>
+        <div class="actions-grid">
+            <div class="action-card">
+                <h3>📦 List New Item</h3>
+                <p>Add your pre-loved clothes to the swap marketplace and start earning eco-points!</p>
+                <button class="btn" onclick="openMyItems()">My Items</button>
+            </div>
+            <div class="action-card">
+                <h3>🔍 Browse Items</h3>
+                <p>Discover amazing clothes from other eco-conscious fashion lovers.</p>
+                <button class="btn btn-secondary" onclick="openBrowseItems()">Browse</button>
+            </div>
+            <div class="action-card">
+                <h3>🤝 My Swaps</h3>
+                <p>Manage your swap requests and see the status of your exchanges.</p>
+                <button class="btn btn-secondary" onclick="openMySwaps()">View Swaps</button>
+            </div>
+            <div class="action-card">
+                <h3>🏆 Eco-Points</h3>
+                <p>Track your sustainability progress and see how you're helping the planet!</p>
+                <button class="btn btn-secondary" onclick="openEcoPoints()">View Points</button>
+            </div>
+        </div>
+        <!-- Modals for each dashboard section -->
+        <div id="modalOverlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(16,19,26,0.85);z-index:9999;align-items:center;justify-content:center;"></div>
+    </div>
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentUser = null;
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            if (!token || !user) {
+                window.location.href = '/index.html';
+                return;
+            }
+            currentUser = JSON.parse(user);
+            loadUserData();
+            loadDashboardData();
+        });
+        function loadUserData() {
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('userFullName').textContent = currentUser.full_name || currentUser.username;
+            document.getElementById('userEcoPoints').textContent = currentUser.eco_points;
+            document.getElementById('userTier').textContent = currentUser.tier;
+        }
+        async function loadDashboardData() {
+            try {
+                const token = localStorage.getItem('token');
+                const itemsResponse = await fetch(`${API_BASE}/items/my-items`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (itemsResponse.ok) {
+                    const items = await itemsResponse.json();
+                    document.getElementById('totalItems').textContent = items.length;
+                }
+                const swapsResponse = await fetch(`${API_BASE}/swaps/`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (swapsResponse.ok) {
+                    const swaps = await swapsResponse.json();
+                    const completedSwaps = swaps.filter(swap => swap.status === 'completed');
+                    const pendingSwaps = swaps.filter(swap => swap.status === 'pending');
+                    document.getElementById('totalSwaps').textContent = completedSwaps.length;
+                    document.getElementById('pendingSwaps').textContent = pendingSwaps.length;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+        }
+        // Modal helpers
+        function showModal(contentHtml) {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.innerHTML = `<div style='background:#fff;color:#10131a;border-radius:16px;max-width:95vw;width:500px;max-height:90vh;overflow:auto;box-shadow:0 8px 32px rgba(16,19,26,0.25);padding:2rem 1.5rem;position:relative;'>
+                <button onclick='closeModal()' style='position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;'>&times;</button>
+                ${contentHtml}
+            </div>`;
+            overlay.style.display = 'flex';
+        }
+        function closeModal() {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.style.display = 'none';
+            overlay.innerHTML = '';
+        }
+        // My Items modal
+        async function openMyItems() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/items/my-items`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const items = res.ok ? await res.json() : [];
+            let html = `<h2 style='margin-bottom:1rem;'>My Items</h2>`;
+            html += `<button class='btn' style='margin-bottom:1.5rem;' onclick='showAddItemForm()'>+ Add New Item</button>`;
+            if (items.length === 0) {
+                html += `<div style='color:#888;'>No items listed yet.</div>`;
+            } else {
+                html += `<div style='display:flex;flex-direction:column;gap:1.2rem;'>`;
+                for (const item of items) {
+                    html += `<div style='background:#10131a;color:#fff;border-radius:10px;padding:1rem 1.2rem;display:flex;flex-direction:column;gap:0.3rem;'>
+                        <div style='font-weight:700;font-size:1.1rem;'>${item.title}</div>
+                        <div style='font-size:0.95rem;'>${item.category} | ${item.size} | ${item.condition}</div>
+                        <div style='font-size:0.95rem;color:#b0b3c6;'>${item.description || ''}</div>
+                        <div style='margin-top:0.5rem;display:flex;gap:0.7rem;'>
+                            <button class='btn btn-secondary' onclick='showEditItemForm(${item.id})'>Edit</button>
+                            <button class='btn btn-secondary' onclick='deleteItem(${item.id})'>Delete</button>
+                        </div>
+                    </div>`;
+                }
+                html += `</div>`;
+            }
+            showModal(html);
+        }
+        // Add/Edit Item forms
+        function showAddItemForm() {
+            showModal(`<h2>Add New Item</h2>
+                <form id='addItemForm' onsubmit='submitAddItem(event)'>
+                    <input name='title' placeholder='Title' required style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'/>
+                    <select name='category' required style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;background:#fff;'>
+                        <option value=''>Select Category</option>
+                        <option value='tops'>Tops</option>
+                        <option value='bottoms'>Bottoms</option>
+                        <option value='dresses'>Dresses</option>
+                        <option value='outerwear'>Outerwear</option>
+                        <option value='shoes'>Shoes</option>
+                        <option value='accessories'>Accessories</option>
+                    </select>
+                    <input name='size' placeholder='Size' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'/>
+                    <select name='condition' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;background:#fff;'>
+                        <option value=''>Select Condition</option>
+                        <option value='new'>New</option>
+                        <option value='like-new'>Like New</option>
+                        <option value='good'>Good</option>
+                        <option value='fair'>Fair</option>
+                        <option value='worn'>Worn</option>
+                    </select>
+                    <input name='brand' placeholder='Brand' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'/>
+                    <div id='addImageDropZone' style='width:100%;height:120px;border:2px dashed #10131a;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:0.7rem;cursor:pointer;background:#fafbfc;' onclick='document.getElementById("addImageInput").click()'>
+                        <span id='addImageDropText'>Drop image here or click to select</span>
+                        <input type='file' id='addImageInput' accept='image/*' style='display:none' onchange='handleImageUpload(event,"add")'/>
+                    </div>
+                    <img id='addImagePreview' src='' style='display:none;max-width:100%;max-height:100px;margin-bottom:0.7rem;border-radius:8px;'/>
+                    <textarea name='description' placeholder='Description' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'></textarea>
+                    <input type='hidden' name='image_data' id='addImageData'/>
+                    <button class='btn' type='submit'>Add Item</button>
+                </form>`);
+            // Drag-and-drop events
+            const dropZone = document.getElementById('addImageDropZone');
+            dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background='#e0e7ef'; });
+            dropZone.addEventListener('dragleave', e => { e.preventDefault(); dropZone.style.background='#fafbfc'; });
+            dropZone.addEventListener('drop', e => {
+                e.preventDefault();
+                dropZone.style.background='#fafbfc';
+                const file = e.dataTransfer.files[0];
+                handleImageFile(file, 'add');
+            });
+        }
+        function handleImageUpload(e, formType) {
+            const file = e.target.files[0];
+            handleImageFile(file, formType);
+        }
+        function handleImageFile(file, formType) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                document.getElementById(formType+'ImagePreview').src = evt.target.result;
+                document.getElementById(formType+'ImagePreview').style.display = 'block';
+                document.getElementById(formType+'ImageData').value = evt.target.result;
+                document.getElementById(formType+'ImageDropText').textContent = 'Image selected';
+            };
+            reader.readAsDataURL(file);
+        }
+        async function submitAddItem(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = Object.fromEntries(new FormData(form));
+            // Map image_data to image_url for backend compatibility
+            if (data.image_data) {
+                data.image_url = data.image_data;
+                delete data.image_data;
+            }
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/items/`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) {
+                openMyItems();
+            } else {
+                alert('Failed to add item.');
+            }
+        }
+        function showEditItemForm(itemId) {
+            // For brevity, fetch item and show similar form as add, prefilled
+            fetch(`${API_BASE}/items/${itemId}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+                .then(res => res.json())
+                .then(item => {
+                    showModal(`<h2>Edit Item</h2>
+                        <form id='editItemForm' onsubmit='submitEditItem(event,${itemId})'>
+                            <input name='title' value='${item.title}' placeholder='Title' required style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'/>
+                            <select name='category' required style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;background:#fff;'>
+                                <option value='' ${!item.category ? 'selected' : ''}>Select Category</option>
+                                <option value='tops' ${item.category === 'tops' ? 'selected' : ''}>Tops</option>
+                                <option value='bottoms' ${item.category === 'bottoms' ? 'selected' : ''}>Bottoms</option>
+                                <option value='dresses' ${item.category === 'dresses' ? 'selected' : ''}>Dresses</option>
+                                <option value='outerwear' ${item.category === 'outerwear' ? 'selected' : ''}>Outerwear</option>
+                                <option value='shoes' ${item.category === 'shoes' ? 'selected' : ''}>Shoes</option>
+                                <option value='accessories' ${item.category === 'accessories' ? 'selected' : ''}>Accessories</option>
+                            </select>
+                            <input name='size' value='${item.size||''}' placeholder='Size' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'/>
+                            <select name='condition' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;background:#fff;'>
+                                <option value='' ${!item.condition ? 'selected' : ''}>Select Condition</option>
+                                <option value='new' ${item.condition === 'new' ? 'selected' : ''}>New</option>
+                                <option value='like-new' ${item.condition === 'like-new' ? 'selected' : ''}>Like New</option>
+                                <option value='good' ${item.condition === 'good' ? 'selected' : ''}>Good</option>
+                                <option value='fair' ${item.condition === 'fair' ? 'selected' : ''}>Fair</option>
+                                <option value='worn' ${item.condition === 'worn' ? 'selected' : ''}>Worn</option>
+                            </select>
+                            <input name='brand' value='${item.brand||''}' placeholder='Brand' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'/>
+                            <div id='editImageDropZone' style='width:100%;height:120px;border:2px dashed #10131a;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:0.7rem;cursor:pointer;background:#fafbfc;' onclick='document.getElementById("editImageInput").click()'>
+                                <span id='editImageDropText'>Drop image here or click to select</span>
+                                <input type='file' id='editImageInput' accept='image/*' style='display:none' onchange='handleImageUpload(event,"edit")'/>
+                            </div>
+                            <img id='editImagePreview' src='${item.image_url||''}' style='${item.image_url ? 'display:block;' : 'display:none;'}max-width:100%;max-height:100px;margin-bottom:0.7rem;border-radius:8px;'/>
+                            <textarea name='description' placeholder='Description' style='width:100%;margin-bottom:0.7rem;padding:0.7rem;border-radius:8px;border:1px solid #ccc;'>${item.description||''}</textarea>
+                            <input type='hidden' name='image_data' id='editImageData' value='${item.image_url||''}'/>
+                            <button class='btn' type='submit'>Save Changes</button>
+                        </form>`);
+                    // Drag-and-drop events
+                    const dropZone = document.getElementById('editImageDropZone');
+                    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background='#e0e7ef'; });
+                    dropZone.addEventListener('dragleave', e => { e.preventDefault(); dropZone.style.background='#fafbfc'; });
+                    dropZone.addEventListener('drop', e => {
+                        e.preventDefault();
+                        dropZone.style.background='#fafbfc';
+                        const file = e.dataTransfer.files[0];
+                        handleImageFile(file, 'edit');
+                    });
+                });
+        }
+        async function submitEditItem(e, itemId) {
+            e.preventDefault();
+            const form = e.target;
+            const data = Object.fromEntries(new FormData(form));
+            // Map image_data to image_url for backend compatibility
+            if (data.image_data) {
+                data.image_url = data.image_data;
+                delete data.image_data;
+            }
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/items/${itemId}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) {
+                openMyItems();
+            } else {
+                alert('Failed to update item.');
+            }
+        }
+        async function deleteItem(itemId) {
+            if (!confirm('Delete this item?')) return;
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/items/${itemId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                openMyItems();
+            } else {
+                alert('Failed to delete item.');
+            }
+        }
+        // Browse Items modal
+        async function openBrowseItems() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/items/`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const items = res.ok ? await res.json() : [];
+            let html = `<h2 style='margin-bottom:1rem;'>Browse Items</h2>`;
+            if (items.length === 0) {
+                html += `<div style='color:#888;'>No items available for swap.</div>`;
+            } else {
+                html += `<div style='display:flex;flex-direction:column;gap:1.2rem;'>`;
+                for (const item of items) {
+                    html += `<div style='background:#10131a;color:#fff;border-radius:10px;padding:1rem 1.2rem;display:flex;flex-direction:column;gap:0.3rem;'>
+                        <div style='font-weight:700;font-size:1.1rem;'>${item.title}</div>
+                        <div style='font-size:0.95rem;'>${item.category} | ${item.size} | ${item.condition}</div>
+                        <div style='font-size:0.95rem;color:#b0b3c6;'>${item.description || ''}</div>
+                        <div style='margin-top:0.5rem;display:flex;gap:0.7rem;'>
+                            <button class='btn btn-secondary' onclick='requestSwap(${item.id})'>Request Swap</button>
+                        </div>
+                    </div>`;
+                }
+                html += `</div>`;
+            }
+            showModal(html);
+        }
+        async function requestSwap(itemId) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/swaps/`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id: itemId })
+            });
+            if (res.ok) {
+                alert('Swap request sent!');
+                closeModal();
+            } else {
+                alert('Failed to request swap.');
+            }
+        }
+        // My Swaps modal
+        async function openMySwaps() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/swaps/`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const swaps = res.ok ? await res.json() : [];
+            let html = `<h2 style='margin-bottom:1rem;'>My Swaps</h2>`;
+            if (swaps.length === 0) {
+                html += `<div style='color:#888;'>No swaps yet.</div>`;
+            } else {
+                html += `<div style='display:flex;flex-direction:column;gap:1.2rem;'>`;
+                for (const swap of swaps) {
+                    html += `<div style='background:#10131a;color:#fff;border-radius:10px;padding:1rem 1.2rem;display:flex;flex-direction:column;gap:0.3rem;'>
+                        <div style='font-weight:700;font-size:1.1rem;'>Item: ${swap.item_title || swap.item_id}</div>
+                        <div style='font-size:0.95rem;'>Status: ${swap.status}</div>
+                        <div style='font-size:0.95rem;color:#b0b3c6;'>Message: ${swap.message || ''}</div>
+                        <div style='margin-top:0.5rem;display:flex;gap:0.7rem;'>
+                            ${swap.status === 'pending' && swap.is_owner ? `<button class='btn btn-secondary' onclick='acceptSwap(${swap.id})'>Accept</button><button class='btn btn-secondary' onclick='rejectSwap(${swap.id})'>Reject</button>` : ''}
+                            ${swap.status === 'accepted' ? `<button class='btn btn-secondary' onclick='completeSwap(${swap.id})'>Complete</button>` : ''}
+                        </div>
+                    </div>`;
+                }
+                html += `</div>`;
+            }
+            showModal(html);
+        }
+        async function acceptSwap(swapId) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/swaps/${swapId}/accept`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                openMySwaps();
+            } else {
+                alert('Failed to accept swap.');
+            }
+        }
+        async function rejectSwap(swapId) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/swaps/${swapId}/reject`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                openMySwaps();
+            } else {
+                alert('Failed to reject swap.');
+            }
+        }
+        async function completeSwap(swapId) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/swaps/${swapId}/complete`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                openMySwaps();
+            } else {
+                alert('Failed to complete swap.');
+            }
+        }
+        // Eco-Points modal
+        function openEcoPoints() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            let html = `<h2 style='margin-bottom:1rem;'>Eco-Points</h2>`;
+            html += `<div style='font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;'>🌱 ${user.eco_points} points</div>`;
+            html += `<div style='font-size:1.1rem;margin-bottom:1.5rem;'>Current Tier: <b>${user.tier}</b></div>`;
+            html += `<div style='color:#888;'>Earn eco-points by completing swaps! Each completed swap gives you 50 points.</div>`;
+            showModal(html);
+        }
+        // Attach form handlers globally
+        window.submitAddItem = submitAddItem;
+        window.submitEditItem = submitEditItem;
+        window.showAddItemForm = showAddItemForm;
+        window.showEditItemForm = showEditItemForm;
+        window.deleteItem = deleteItem;
+        window.openMyItems = openMyItems;
+        window.openBrowseItems = openBrowseItems;
+        window.openMySwaps = openMySwaps;
+        window.openEcoPoints = openEcoPoints;
+        window.requestSwap = requestSwap;
+        window.acceptSwap = acceptSwap;
+        window.rejectSwap = rejectSwap;
+        window.completeSwap = completeSwap;
+        window.closeModal = closeModal;
+    </script>
+</body>
+</html> 
