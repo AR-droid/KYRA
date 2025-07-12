@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Items | KYRA</title>
+    <style>
+        body {
+            background: #fff;
+            color: #10131a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            background: #10131a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #4f8cff;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 7.5rem auto 2rem auto;
+            padding: 0 2rem;
+        }
+        .filters {
+            background: #f5f5f5;
+            padding: 1.2rem 1rem 1rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            align-items: center;
+        }
+        .filters select, .filters input {
+            padding: 0.6rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .recommendations {
+            background: #e8f5e8;
+            padding: 1.2rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .recommendations-title {
+            color: #2d5a2d;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.7rem;
+        }
+        .recommendations-grid {
+            display: flex;
+            gap: 1.2rem;
+            overflow-x: auto;
+        }
+        .recommendation-card {
+            background: #fff;
+            color: #10131a;
+            border-radius: 10px;
+            min-width: 220px;
+            max-width: 220px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .recommendation-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.7rem;
+        }
+        .recommendation-card .title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .recommendation-card .meta {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .recommendation-card button {
+            margin-top: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+        .grid {
+            column-count: 4;
+            column-gap: 1.5rem;
+        }
+        @media (max-width: 1200px) {
+            .grid { column-count: 3; }
+        }
+        @media (max-width: 900px) {
+            .grid { column-count: 2; }
+        }
+        @media (max-width: 600px) {
+            .grid { column-count: 1; }
+            .container { padding: 0 0.5rem; }
+        }
+        .item-card {
+            background: #fff;
+            color: #10131a;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(16,19,26,0.08);
+            display: inline-block;
+            width: 100%;
+            break-inside: avoid;
+            padding: 0;
+            overflow: hidden;
+        }
+        .item-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        .item-card-content {
+            padding: 1rem 1rem 0.7rem 1rem;
+        }
+        .item-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        .item-meta {
+            font-size: 0.95rem;
+            color: #4f8cff;
+            margin-bottom: 0.5rem;
+        }
+        .item-desc {
+            font-size: 0.95rem;
+            color: #b0b3c6;
+            margin-bottom: 0.7rem;
+        }
+        .item-actions {
+            display: flex;
+            gap: 0.7rem;
+            margin-top: 0.5rem;
+        }
+        .btn {
+            background: #10131a;
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(16,19,26,0.08);
+        }
+        .btn:hover {
+            background: #4f8cff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">KYRA</div>
+        <div class="nav-links">
+            <a href="dashboard.html">DASHBOARD</a>
+            <a href="dashboard.html#items">MY ITEMS</a>
+            <a href="dashboard.html#swaps">SWAPS</a>
+            <a href="browse.html" class="active">BROWSE</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="filters" id="filtersBar">
+            <select id="categoryFilter"><option value="">All Categories</option></select>
+            <select id="brandFilter"><option value="">All Brands</option></select>
+            <select id="colorFilter"><option value="">All Colors</option></select>
+            <select id="locationFilter"><option value="">All Locations</option></select>
+            <select id="sizeFilter"><option value="">All Sizes</option></select>
+            <select id="conditionFilter"><option value="">All Conditions</option></select>
+            <input id="searchInput" placeholder="Search title or description..." />
+            <button class="btn" onclick="applyFilters()">Apply</button>
+        </div>
+        <div class="recommendations">
+            <div class="recommendations-title">🌱 Recommended for You</div>
+            <div class="recommendations-grid" id="recommendationsGrid">
+                <div style="color:#666;font-style:italic;">Loading recommendations...</div>
+            </div>
+        </div>
+        <div class="grid" id="itemsGrid"></div>
+    </div>
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let allItems = [];
+        let allRecommendations = [];
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadFilters();
+            await loadItems();
+            await loadRecommendations();
+        });
+        async function loadFilters() {
+            const [categories, brands, colors, locations] = await Promise.all([
+                fetch(`${API_BASE}/items/filters/categories`).then(r=>r.json()),
+                fetch(`${API_BASE}/items/filters/brands`).then(r=>r.json()),
+                fetch(`${API_BASE}/items/filters/colors`).then(r=>r.json()),
+                fetch(`${API_BASE}/items/filters/locations`).then(r=>r.json()),
+            ]);
+            fillSelect('categoryFilter', categories);
+            fillSelect('brandFilter', brands);
+            fillSelect('colorFilter', colors);
+            fillSelect('locationFilter', locations);
+            fillSelect('conditionFilter', ['new','like-new','good','fair','worn']);
+        }
+        function fillSelect(id, arr) {
+            const sel = document.getElementById(id);
+            arr.forEach(val => {
+                const opt = document.createElement('option');
+                opt.value = val;
+                opt.textContent = val.charAt(0).toUpperCase() + val.slice(1);
+                sel.appendChild(opt);
+            });
+        }
+        async function loadItems() {
+            const res = await fetch(`${API_BASE}/items/`);
+            allItems = res.ok ? await res.json() : [];
+            renderItems(allItems);
+        }
+        function renderItems(items) {
+            const grid = document.getElementById('itemsGrid');
+            if (!items.length) {
+                grid.innerHTML = '<div style="color:#888;">No items found.</div>';
+                return;
+            }
+            grid.innerHTML = items.map(item => `
+                <div class="item-card">
+                    <img src="${item.image_url || 'https://via.placeholder.com/300x220?text=No+Image'}" alt="${item.title}" />
+                    <div class="item-card-content">
+                        <div class="item-title">${item.title}</div>
+                        <div class="item-meta">${item.category} | ${item.size || ''} | ${item.condition || ''}</div>
+                        <div class="item-meta">${item.brand ? '🏷️ ' + item.brand : ''} ${item.color ? '🎨 ' + item.color : ''} ${item.location ? '📍 ' + item.location : ''}</div>
+                        <div class="item-desc">${item.description || ''}</div>
+                        <div class="item-actions">
+                            <button class="btn" onclick="requestSwap(${item.id})">Request Swap</button>
+                            <button class="btn" onclick="viewItemDetails(${item.id})">View Details</button>
+                            <button class="btn" onclick="messageUser(${item.owner_id}, '${item.title}')" style="background:#28a745;">Message</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        async function loadRecommendations() {
+            const res = await fetch(`${API_BASE}/swaps/recommendations/1`);
+            allRecommendations = res.ok ? await res.json() : [];
+            renderRecommendations(allRecommendations);
+        }
+        function renderRecommendations(items) {
+            const grid = document.getElementById('recommendationsGrid');
+            if (!items.length) {
+                grid.innerHTML = '<div style="color:#888;">No recommendations yet.</div>';
+                return;
+            }
+            grid.innerHTML = items.map(item => `
+                <div class="recommendation-card">
+                    <img src="${item.image_url || 'https://via.placeholder.com/220x120?text=No+Image'}" alt="${item.title}" />
+                    <div class="title">${item.title}</div>
+                    <div class="meta">${item.category} | ${item.condition}</div>
+                    <button class="btn" onclick="requestSwap(${item.id})">Request Swap</button>
+                </div>
+            `).join('');
+        }
+        function applyFilters() {
+            let filtered = allItems;
+            const cat = document.getElementById('categoryFilter').value;
+            const brand = document.getElementById('brandFilter').value;
+            const color = document.getElementById('colorFilter').value;
+            const loc = document.getElementById('locationFilter').value;
+            const size = document.getElementById('sizeFilter').value;
+            const cond = document.getElementById('conditionFilter').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            if (cat) filtered = filtered.filter(i => i.category === cat);
+            if (brand) filtered = filtered.filter(i => i.brand === brand);
+            if (color) filtered = filtered.filter(i => i.color === color);
+            if (loc) filtered = filtered.filter(i => i.location && i.location.includes(loc));
+            if (size) filtered = filtered.filter(i => i.size === size);
+            if (cond) filtered = filtered.filter(i => i.condition === cond);
+            if (search) filtered = filtered.filter(i => (i.title && i.title.toLowerCase().includes(search)) || (i.description && i.description.toLowerCase().includes(search)));
+            renderItems(filtered);
+        }
+        async function requestSwap(itemId) {
+            const item = allItems.find(i => i.id === itemId) || allRecommendations.find(i => i.id === itemId);
+            if (!item) {
+                alert('Item not found.');
+                return;
+            }
+            
+            // Check if user wants to use points
+            const usePoints = confirm(`Would you like to redeem this item with eco-points?\n\nItem: ${item.title}\nPoints Price: ${item.points_price || 100} points\n\nClick OK to use points, Cancel for regular swap request.`);
+            
+            let message = '';
+            let pointsAmount = 0;
+            
+            if (usePoints) {
+                pointsAmount = item.points_price || 100;
+                message = prompt(`Redeem "${item.title}" for ${pointsAmount} eco-points?\nAdd a message (optional):`);
+            } else {
+                message = prompt('Add a message to the owner (optional):');
+            }
+            
+            const res = await fetch(`${API_BASE}/swaps/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    item_id: itemId, 
+                    requester_message: message || '',
+                    use_points: usePoints,
+                    points_amount: pointsAmount
+                })
+            });
+            
+            if (res.ok) {
+                if (usePoints) {
+                    alert(`Item redeemed for ${pointsAmount} eco-points!`);
+                } else {
+                    alert('Swap request sent!');
+                }
+            } else {
+                const error = await res.json();
+                alert(`Failed to ${usePoints ? 'redeem' : 'request swap'}: ${error.detail || 'Unknown error'}`);
+            }
+        }
+        async function viewItemDetails(itemId) {
+            const res = await fetch(`${API_BASE}/items/${itemId}`);
+            const item = res.ok ? await res.json() : null;
+            if (!item) {
+                alert('Failed to load item details.');
+                return;
+            }
+            let html = `<h2>Item Details</h2>
+                <div style='background:#f5f5f5;padding:1.5rem;border-radius:8px;margin-bottom:1rem;'>
+                    <img src='${item.image_url || 'https://via.placeholder.com/300x220?text=No+Image'}' style='width:100%;max-width:350px;border-radius:8px;margin-bottom:1rem;' />
+                    <h3 style='margin-bottom:0.8rem;'>${item.title}</h3>
+                    <p><strong>Category:</strong> ${item.category}</p>
+                    <p><strong>Size:</strong> ${item.size || 'Not specified'}</p>
+                    <p><strong>Condition:</strong> ${item.condition || 'Not specified'}</p>
+                    <p><strong>Brand:</strong> ${item.brand || 'Not specified'}</p>
+                    <p><strong>Color:</strong> ${item.color || 'Not specified'}</p>
+                    <p><strong>Location:</strong> ${item.location || 'Not specified'}</p>
+                    <p><strong>Description:</strong> ${item.description || 'No description'}</p>
+                    ${item.owner ? `<p><strong>Owner:</strong> ${item.owner.full_name || item.owner.username}</p>` : ''}
+                </div>
+                <button class='btn' onclick='requestSwap(${item.id})'>Request Swap</button>
+                <button class='btn' onclick='window.history.back()'>Back</button>`;
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(16,19,26,0.85)';
+            modal.style.zIndex = '9999';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.innerHTML = `<div style='background:#fff;color:#10131a;border-radius:16px;max-width:95vw;width:500px;max-height:90vh;overflow:auto;box-shadow:0 8px 32px rgba(16,19,26,0.25);padding:2rem 1.5rem;position:relative;'>
+                <button onclick='this.parentNode.parentNode.remove()' style='position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;'>&times;</button>
+                ${html}
+            </div>`;
+            document.body.appendChild(modal);
+        }
+
+        async function messageUser(userId, itemTitle) {
+            const message = prompt(`Send a message to the owner of "${itemTitle}" (optional):`);
+            
+            const res = await fetch(`${API_BASE}/chat/conversations/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    other_user_id: userId, 
+                    message: message || `Hi! I'm interested in your item "${itemTitle}". Can we chat about it?` 
+                })
+            });
+            
+            if (res.ok) {
+                alert('Message sent! You can view your conversations in the dashboard.');
+            } else {
+                alert('Failed to send message.');
+            }
+        }
+    </script>
+</body>
+</html> 

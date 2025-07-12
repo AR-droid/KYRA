@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYRA - Search Users</title>
+    <style>
+        body {
+            background: #fff;
+            color: #10131a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            background: #10131a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #4f8cff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 7.5rem auto 2rem auto;
+            padding: 0 2rem;
+        }
+        .search-header {
+            background: #10131a;
+            color: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .search-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .search-header p {
+            color: #e0e0e0;
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+        }
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #fff;
+            color: #10131a;
+        }
+        .filter-btn {
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .filter-btn:hover {
+            background: #3a7ce8;
+        }
+        .filter-btn.active {
+            background: #28a745;
+        }
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .user-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .user-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        .user-info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+            color: #10131a;
+        }
+        .user-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .user-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .stat {
+            background: #f8f9fa;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            color: #666;
+        }
+        .user-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn {
+            background: #10131a;
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex: 1;
+        }
+        .btn:hover {
+            background: #4f8cff;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        .page-btn {
+            background: #10131a;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .page-btn:hover {
+            background: #4f8cff;
+        }
+        .page-btn.active {
+            background: #4f8cff;
+        }
+        .page-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        .tier-badge {
+            background: #ffd700;
+            color: #10131a;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tier-badge.silver {
+            background: #c0c0c0;
+        }
+        .tier-badge.bronze {
+            background: #cd7f32;
+            color: #fff;
+        }
+        @media (max-width: 768px) {
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-filters {
+                flex-direction: column;
+            }
+            .search-input {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">KYRA</div>
+        <div class="nav-links">
+            <a href="dashboard.html">DASHBOARD</a>
+            <a href="browse.html">BROWSE</a>
+            <a href="search-users.html" class="active">SEARCH USERS</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="search-header">
+            <h1>🔍 Search Users</h1>
+            <p>Discover and connect with other sustainable fashion enthusiasts in the KYRA community</p>
+            <div class="search-filters">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by name, username, or location..." />
+                <button class="filter-btn active" onclick="setFilter('all')">All Users</button>
+                <button class="filter-btn" onclick="setFilter('recommended')">Recommended</button>
+                <button class="filter-btn" onclick="setFilter('nearby')">Nearby</button>
+                <button class="filter-btn" onclick="setFilter('active')">Most Active</button>
+            </div>
+        </div>
+        
+        <div id="usersGrid" class="users-grid">
+            <div class="loading">Loading users...</div>
+        </div>
+        
+        <div id="pagination" class="pagination" style="display: none;"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentFilter = 'all';
+        let currentPage = 0;
+        let hasMore = false;
+        let searchQuery = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers();
+            
+            // Search input handler
+            const searchInput = document.getElementById('searchInput');
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    searchQuery = e.target.value;
+                    currentPage = 0;
+                    loadUsers();
+                }, 500);
+            });
+        });
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            currentPage = 0;
+            
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadUsers();
+        }
+
+        async function loadUsers() {
+            const grid = document.getElementById('usersGrid');
+            grid.innerHTML = '<div class="loading">Loading users...</div>';
+            
+            try {
+                let url;
+                if (currentFilter === 'recommended') {
+                    url = `${API_BASE}/chat/users/recommended`;
+                } else if (currentFilter === 'nearby') {
+                    url = `${API_BASE}/chat/users/nearby`;
+                } else if (currentFilter === 'active') {
+                    url = `${API_BASE}/chat/users/most-active`;
+                } else {
+                    url = `${API_BASE}/chat/users/search?query=${encodeURIComponent(searchQuery)}&limit=20&offset=${currentPage * 20}`;
+                }
+                
+                const res = await fetch(url);
+                const data = res.ok ? await res.json() : { users: [] };
+                
+                if (currentFilter === 'all') {
+                    hasMore = data.has_more || false;
+                    renderUsers(data.users);
+                    renderPagination();
+                } else {
+                    renderUsers(data);
+                    document.getElementById('pagination').style.display = 'none';
+                }
+            } catch (error) {
+                grid.innerHTML = '<div class="no-results">Error loading users. Please try again.</div>';
+            }
+        }
+
+        function renderUsers(users) {
+            const grid = document.getElementById('usersGrid');
+            
+            if (!users || users.length === 0) {
+                grid.innerHTML = '<div class="no-results">No users found. Try adjusting your search criteria.</div>';
+                return;
+            }
+            
+            grid.innerHTML = users.map(user => `
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-info">
+                            <h3>${user.full_name || user.username}</h3>
+                            <p>@${user.username}</p>
+                            ${user.location ? `<p>📍 ${user.location}</p>` : ''}
+                        </div>
+                        <div class="tier-badge ${user.tier}">${user.tier.toUpperCase()}</div>
+                    </div>
+                    
+                    <div class="user-stats">
+                        <div class="stat">🛍️ ${user.items_count || 0} items</div>
+                        <div class="stat">🤝 ${user.completed_swaps || 0} swaps</div>
+                        <div class="stat">🏆 ${user.eco_points || 0} points</div>
+                    </div>
+                    
+                    <div class="user-actions">
+                        ${user.has_conversation ? 
+                            `<button class="btn btn-secondary" onclick="openConversation(${user.conversation_id})">Open Chat</button>` :
+                            `<button class="btn btn-success" onclick="startConversation(${user.id})">Start Chat</button>`
+                        }
+                        <button class="btn" onclick="viewUserProfile(${user.id})">View Profile</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            if (!hasMore && currentPage === 0) {
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            pagination.style.display = 'flex';
+            let html = '';
+            
+            if (currentPage > 0) {
+                html += `<button class="page-btn" onclick="changePage(${currentPage - 1})">Previous</button>`;
+            }
+            
+            html += `<button class="page-btn active">${currentPage + 1}</button>`;
+            
+            if (hasMore) {
+                html += `<button class="page-btn" onclick="changePage(${currentPage + 1})">Next</button>`;
+            }
+            
+            pagination.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            loadUsers();
+        }
+
+        async function startConversation(userId) {
+            const message = prompt('Send an initial message (optional):');
+            
+            const res = await fetch(`${API_BASE}/chat/conversations/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    other_user_id: userId, 
+                    message: message || 'Hi! I\'d like to connect with you on KYRA.' 
+                })
+            });
+            
+            if (res.ok) {
+                alert('Conversation started! You can view your messages in the dashboard.');
+                // Update the UI to show "Open Chat" button
+                loadUsers();
+            } else {
+                alert('Failed to start conversation.');
+            }
+        }
+
+        function openConversation(conversationId) {
+            // Redirect to dashboard with chat open
+            window.location.href = `dashboard.html?openChat=${conversationId}`;
+        }
+
+        function viewUserProfile(userId) {
+            // For now, just show a simple modal
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(16,19,26,0.85)';
+            modal.style.zIndex = '9999';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            
+            modal.innerHTML = `
+                <div style='background:#fff;color:#10131a;border-radius:16px;max-width:95vw;width:500px;max-height:90vh;overflow:auto;box-shadow:0 8px 32px rgba(16,19,26,0.25);padding:2rem 1.5rem;position:relative;'>
+                    <button onclick='this.parentNode.parentNode.remove()' style='position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;'>&times;</button>
+                    <h2>${user.full_name || user.username}</h2>
+                    <p><strong>Username:</strong> @${user.username}</p>
+                    ${user.location ? `<p><strong>Location:</strong> ${user.location}</p>` : ''}
+                    <p><strong>Tier:</strong> <span class="tier-badge ${user.tier}">${user.tier.toUpperCase()}</span></p>
+                    <p><strong>Items:</strong> ${user.items_count || 0}</p>
+                    <p><strong>Completed Swaps:</strong> ${user.completed_swaps || 0}</p>
+                    <p><strong>Eco Points:</strong> ${user.eco_points || 0}</p>
+                    <div style='margin-top:1.5rem;display:flex;gap:1rem;'>
+                        <button class='btn btn-success' onclick='startConversation(${user.id}); this.parentNode.parentNode.parentNode.remove()'>Start Chat</button>
+                        <button class='btn btn-secondary' onclick='this.parentNode.parentNode.parentNode.remove()'>Close</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html> 
