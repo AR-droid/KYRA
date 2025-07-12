@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYRA - Sustainable Clothing Swap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .toggle-form a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success {
+            color: #4CAF50;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        .eco-points {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .eco-points h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .eco-points p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">KYRA</div>
+            <div class="tagline">Sustainable Clothing Swap</div>
+        </div>
+        
+        <div class="form-container">
+            <!-- Login Form -->
+            <form id="loginForm" class="form active">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                    <div class="error" id="loginEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                    <div class="error" id="loginPasswordError"></div>
+                </div>
+                
+                <button type="submit" class="btn">Login</button>
+                <div class="loading" id="loginLoading">
+                    <div class="spinner"></div>
+                </div>
+                <div class="error" id="loginError"></div>
+                
+                <div class="toggle-form">
+                    <a onclick="toggleForm('register')">Don't have an account? Register</a>
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="form">
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                    <div class="error" id="registerEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" required>
+                    <div class="error" id="registerUsernameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerFullName">Full Name</label>
+                    <input type="text" id="registerFullName" required>
+                    <div class="error" id="registerFullNameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                    <div class="error" id="registerPasswordError"></div>
+                </div>
+                
+                <button type="submit" class="btn">Register</button>
+                <div class="loading" id="registerLoading">
+                    <div class="spinner"></div>
+                </div>
+                <div class="error" id="registerError"></div>
+                <div class="success" id="registerSuccess"></div>
+                
+                <div class="toggle-form">
+                    <a onclick="toggleForm('login')">Already have an account? Login</a>
+                </div>
+            </form>
+
+            <div class="eco-points">
+                <h3>🌱 Earn Eco-Points</h3>
+                <p>Swap clothes, save the planet, and level up your sustainability game!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentUser = null;
+
+        function toggleForm(formType) {
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById(formType + 'Form').classList.add('active');
+            
+            // Clear all errors and messages
+            clearMessages();
+        }
+
+        function clearMessages() {
+            const errors = document.querySelectorAll('.error');
+            const success = document.querySelectorAll('.success');
+            errors.forEach(el => el.style.display = 'none');
+            success.forEach(el => el.style.display = 'none');
+        }
+
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function showSuccess(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function showLoading(formType) {
+            document.getElementById(formType + 'Loading').style.display = 'block';
+        }
+
+        function hideLoading(formType) {
+            document.getElementById(formType + 'Loading').style.display = 'none';
+        }
+
+        // Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearMessages();
+            showLoading('login');
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token and user data
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    currentUser = data.user;
+                    
+                    // Redirect to dashboard or show success
+                    showSuccess('loginError', 'Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 1000);
+                } else {
+                    showError('loginError', data.detail || 'Login failed');
+                }
+            } catch (error) {
+                showError('loginError', 'Network error. Please try again.');
+            } finally {
+                hideLoading('login');
+            }
+        });
+
+        // Register Form Handler
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearMessages();
+            showLoading('register');
+
+            const userData = {
+                email: document.getElementById('registerEmail').value,
+                username: document.getElementById('registerUsername').value,
+                full_name: document.getElementById('registerFullName').value,
+                password: document.getElementById('registerPassword').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess('registerSuccess', 'Registration successful! You can now login.');
+                    // Clear form
+                    document.getElementById('registerForm').reset();
+                } else {
+                    if (data.detail) {
+                        showError('registerError', data.detail);
+                    } else if (data.errors) {
+                        // Handle validation errors
+                        Object.keys(data.errors).forEach(field => {
+                            showError(`register${field.charAt(0).toUpperCase() + field.slice(1)}Error`, data.errors[field][0]);
+                        });
+                    }
+                }
+            } catch (error) {
+                showError('registerError', 'Network error. Please try again.');
+            } finally {
+                hideLoading('register');
+            }
+        });
+
+        // Check if user is already logged in
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (token && user) {
+                currentUser = JSON.parse(user);
+                // Redirect to dashboard if already logged in
+                window.location.href = '/dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
+    
