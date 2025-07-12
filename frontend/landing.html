@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYRA - Sustainable Clothing Swap</title>
+    <style>
+        body {
+            background: #fff;
+            color: #10131a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            background: #10131a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #4f8cff;
+        }
+        .hero {
+            margin-top: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 3rem 1rem 2rem 1rem;
+        }
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 1.2rem;
+            color: #10131a;
+        }
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+        .btn-login {
+            padding: 1rem 2.5rem;
+            background: #10131a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(16,19,26,0.08);
+        }
+        .btn-login:hover {
+            background: #4f8cff;
+            color: #10131a;
+            transform: translateY(-2px);
+        }
+        .process-section {
+            margin: 4rem 0 2rem 0;
+            padding: 0 1rem;
+            text-align: center;
+        }
+        .process-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            color: #10131a;
+        }
+        .process-underline {
+            width: 60px;
+            height: 4px;
+            background: #10131a;
+            margin: 0.5rem auto 2.5rem auto;
+            border-radius: 2px;
+        }
+        .process-steps {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        .process-card {
+            background: #10131a;
+            color: #fff;
+            border-radius: 12px;
+            width: 220px;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2.2rem 1.2rem 1.5rem 1.2rem;
+            box-shadow: 0 4px 24px rgba(16,19,26,0.10);
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .process-card .step-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: #fff;
+            color: #10131a;
+            border-radius: 6px;
+            padding: 0.2rem 0.8rem;
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 8px rgba(16,19,26,0.10);
+        }
+        .process-card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 2.2rem 0 1rem 0;
+            letter-spacing: 1px;
+        }
+        .process-card-desc {
+            font-size: 1rem;
+            color: #e0e0e0;
+            font-weight: 400;
+        }
+        @media (max-width: 900px) {
+            .process-steps {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 0.7rem;
+                padding: 1rem 0.5rem;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+            .process-title {
+                font-size: 1.3rem;
+            }
+            .process-card {
+                width: 95vw;
+                min-width: 0;
+                padding: 1.5rem 0.5rem 1rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">KYRA</div>
+        <div class="nav-links">
+            <a href="#features">FEATURES</a>
+            <a href="#process">PROCESS</a>
+            <a href="#impact">IMPACT</a>
+            <a href="login.html">LOGIN</a>
+        </div>
+    </nav>
+    <section class="hero">
+        <div class="hero-title">Sustainable Clothing Swap</div>
+        <div class="hero-tagline">Swap clothes, save the planet, and level up your sustainability game!</div>
+        <button class="btn-login" onclick="window.location.href='login.html'">Login</button>
+    </section>
+    <section class="process-section" id="process">
+        <div class="process-title">The Process</div>
+        <div class="process-underline"></div>
+        <div class="process-steps">
+            <div class="process-card">
+                <div class="step-number">01</div>
+                <div class="process-card-title">SUBMIT</div>
+                <div class="process-card-desc">Photograph and catalog your unworn garments with detailed specifications and condition notes.</div>
+            </div>
+            <div class="process-card">
+                <div class="step-number">02</div>
+                <div class="process-card-title">MATCH</div>
+                <div class="process-card-desc">Our algorithm connects you with compatible items based on style preferences and sizing data.</div>
+            </div>
+            <div class="process-card">
+                <div class="step-number">03</div>
+                <div class="process-card-title">EXCHANGE</div>
+                <div class="process-card-desc">Seamless logistics coordination ensures secure, efficient delivery of your selected items.</div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+    
